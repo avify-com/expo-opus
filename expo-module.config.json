@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["AudioConverterModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.audioconverter.AudioConverterModule"]
+  }
+}

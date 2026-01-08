@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+*.tgz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# iOS
+ios/Pods/
+ios/build/
+ios/Frameworks/
+*.xcuserstate
+xcuserdata/
+
+# Android
+android/build/
+android/.gradle/
+android/local.properties
+android/src/main/jniLibs/
+*.iml
+
+# Native build artifacts
+build-ios/
+build-android/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env*
+
+# Claude Code - AI tooling (do not commit)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# coverage
+coverage/

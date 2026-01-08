@@ -1,0 +1,73 @@
+{
+  "name": "@avify-com/expo-opus",
+  "version": "1.0.0",
+  "description": "Expo module for converting OGG/Opus audio to MP3 on iOS and Android",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "prepublishOnly": "expo-module build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "expo",
+    "expo-module",
+    "react-native",
+    "opus",
+    "ogg",
+    "mp3",
+    "audio",
+    "converter",
+    "ios",
+    "android",
+    "libopus",
+    "lame"
+  ],
+  "author": "Avify <dev@avify.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/avify-com/expo-opus#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avify-com/expo-opus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/avify-com/expo-opus/issues"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "peerDependencies": {
+    "expo": ">=51.0.0",
+    "expo-modules-core": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "expo-module-scripts": "^4.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.0"
+  },
+  "files": [
+    "build/*.js",
+    "build/*.d.ts",
+    "build/*.map",
+    "ios/**/*.swift",
+    "ios/**/*.h",
+    "ios/**/*.podspec",
+    "ios/**/Frameworks/**",
+    "ios/**/Shims/**",
+    "!ios/Tests",
+    "android/build.gradle",
+    "android/src/main",
+    "!android/src/main/cpp/*_test.cpp",
+    "!android/src/test",
+    "expo-module.config.json",
+    "README.md",
+    "LICENSE"
+  ]
+}

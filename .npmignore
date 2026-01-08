@@ -1,0 +1,63 @@
+# Source files (included via files in package.json)
+# But exclude test files and dev configs
+
+# Development files
+*.log
+.DS_Store
+.env*
+.vscode/
+.idea/
+
+# Build artifacts that shouldn't be published
+*.tgz
+
+# Scripts (build script is for maintainers only)
+scripts/
+
+# Test files
+**/*.spec.ts
+**/*.test.ts
+**/__tests__/
+**/coverage/
+**/android/src/test/
+**/ios/Tests/
+**/*_test.cpp
+src/__tests__
+build/__tests__
+android/src/test
+ios/Tests
+jest.config.js
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+.circleci/
+.travis.yml
+
+# Example/docs that aren't needed
+example/
+docs/
+
+# Xcode user data
+ios/**/*.xcuserstate
+ios/**/*.xcuserdatad/
+ios/**/xcuserdata/
+ios/build/
+
+# Android build
+android/build/
+android/.gradle/
+android/local.properties
+
+# CocoaPods (will be installed by user)
+ios/Pods/
+
+# Node
+node_modules/
+
+# Explicitly include native libraries (built by CI, must be in package)
+!ios/Frameworks/
+!android/src/main/jniLibs/

@@ -1,0 +1,5 @@
+module opus [system] {
+  header "opus-umbrella.h"
+  export *
+  link "opus"
+}

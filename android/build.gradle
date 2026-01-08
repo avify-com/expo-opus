@@ -1,0 +1,71 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'expo-module-gradle-plugin'
+
+group = 'expo.modules.audioconverter'
+version = '1.0.0'
+
+android {
+  namespace "expo.modules.audioconverter"
+  compileSdk 34
+
+  defaultConfig {
+    minSdk 29  // Required for MediaCodec Opus support
+    targetSdk 34
+    versionCode 1
+    versionName "1.0.0"
+
+    // NDK/CMake configuration for native Opus encoder
+    externalNativeBuild {
+      cmake {
+        cppFlags "-std=c++17"
+        arguments "-DANDROID_STL=c++_shared"
+      }
+    }
+
+    ndk {
+      abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+
+  kotlinOptions {
+    jvmTarget = "17"
+  }
+
+  externalNativeBuild {
+    cmake {
+      path "src/main/cpp/CMakeLists.txt"
+      version "3.18.1"
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+  google()
+  maven { url "https://jitpack.io" }
+}
+
+dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+
+  // LAME MP3 encoder - built from official source via scripts/build-lame-android.sh
+  // No external dependency needed - JNI bindings link to libmp3lame.a
+
+  // Expo modules core (provided by host app)
+  implementation project(':expo-modules-core')
+}
