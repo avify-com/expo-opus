@@ -1,6 +1,6 @@
 {
   "name": "@avify-com/expo-opus",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Expo module for converting OGG/Opus audio to MP3 on iOS and Android",
   "main": "build/index.js",
   "types": "build/index.d.ts",
