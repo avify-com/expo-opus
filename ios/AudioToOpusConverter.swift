@@ -340,10 +340,10 @@ internal class AudioToOpusConverter {
       throw OpusEncodingFailedException("Opus encoder initialization failed: \(error)")
     }
 
-    // Configure encoder
-    opus_encoder_ctl(encoder, OPUS_SET_BITRATE_REQUEST, Int32(bitrate * 1000))
-    opus_encoder_ctl(encoder, OPUS_SET_COMPLEXITY_REQUEST, Int32(5))  // Balanced for voice
-    opus_encoder_ctl(encoder, OPUS_SET_VBR_REQUEST, Int32(1))  // Enable VBR for voice
+    // Configure encoder using Swift-compatible wrapper functions
+    _ = opus_encoder_set_bitrate(encoder, Int32(bitrate * 1000))
+    _ = opus_encoder_set_complexity(encoder, Int32(5))  // Balanced for voice
+    _ = opus_encoder_set_vbr(encoder, Int32(1))  // Enable VBR for voice
 
     // Encode frames
     var packets: [Data] = []
@@ -380,9 +380,12 @@ internal class AudioToOpusConverter {
     packetBuffer: UnsafeMutablePointer<UInt8>
   ) throws -> Data {
     let encodedBytes = samples.withUnsafeBufferPointer { samplesPtr in
-      opus_encode(
+      guard let baseAddress = samplesPtr.baseAddress else {
+        return Int32(-1)  // Will be caught by the error check below
+      }
+      return opus_encode(
         encoder,
-        samplesPtr.baseAddress,
+        baseAddress,
         Int32(Self.frameSize),
         packetBuffer,
         Int32(Self.maxPacketSize)
