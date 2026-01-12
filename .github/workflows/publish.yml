@@ -37,19 +37,22 @@ jobs:
           chmod +x scripts/build-lame-android.sh
           ./scripts/build-lame-android.sh
 
-      - name: Verify Android jniLibs
+      - name: Verify Android native files
         run: |
           for abi in arm64-v8a armeabi-v7a x86 x86_64; do
             test -f android/src/main/jniLibs/$abi/libopus.a || (echo "libopus.a not found for $abi" && exit 1)
             test -f android/src/main/jniLibs/$abi/libmp3lame.a || (echo "libmp3lame.a not found for $abi" && exit 1)
           done
-          echo "All Android native libraries built successfully"
+          test -f android/src/main/cpp/include/lame/lame.h || (echo "lame.h header not found" && exit 1)
+          echo "All Android native files built successfully"
 
-      - name: Upload Android jniLibs
+      - name: Upload Android native files
         uses: actions/upload-artifact@v4
         with:
-          name: android-jnilibs
-          path: android/src/main/jniLibs/
+          name: android-native
+          path: |
+            android/src/main/jniLibs/
+            android/src/main/cpp/include/lame/
 
   # Build iOS native libraries
   build-ios-native:
@@ -87,11 +90,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Android jniLibs
+      - name: Download Android native files
         uses: actions/download-artifact@v4
         with:
-          name: android-jnilibs
-          path: android/src/main/jniLibs/
+          name: android-native
+          path: android/src/main/
 
       - name: Download iOS frameworks
         uses: actions/download-artifact@v4
@@ -123,11 +126,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download Android jniLibs
+      - name: Download Android native files
         uses: actions/download-artifact@v4
         with:
-          name: android-jnilibs
-          path: android/src/main/jniLibs/
+          name: android-native
+          path: android/src/main/
 
       - name: Download iOS frameworks
         uses: actions/download-artifact@v4
@@ -145,6 +148,8 @@ jobs:
             test -f android/src/main/jniLibs/$abi/libopus.a || (echo "libopus.a not found for $abi" && exit 1)
             test -f android/src/main/jniLibs/$abi/libmp3lame.a || (echo "libmp3lame.a not found for $abi" && exit 1)
           done
+          echo "Verifying Android headers..."
+          test -f android/src/main/cpp/include/lame/lame.h || (echo "lame.h header not found" && exit 1)
           echo "All native libraries verified!"
 
       - name: Setup Node.js
