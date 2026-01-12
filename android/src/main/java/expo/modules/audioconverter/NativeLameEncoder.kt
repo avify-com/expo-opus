@@ -112,6 +112,15 @@ internal class NativeLameEncoder private constructor(
 
     @JvmStatic
     private external fun nativeGetVersion(): String
+
+    @JvmStatic
+    private external fun nativeCreate(
+      inSampleRate: Int,
+      outSampleRate: Int,
+      channels: Int,
+      bitrate: Int,
+      quality: Int
+    ): Long
   }
 
   /**
@@ -234,14 +243,6 @@ internal class NativeLameEncoder private constructor(
   }
 
   // Instance native methods
-  private external fun nativeCreate(
-    inSampleRate: Int,
-    outSampleRate: Int,
-    channels: Int,
-    bitrate: Int,
-    quality: Int
-  ): Long
-
   private external fun nativeDestroy(handle: Long)
 
   private external fun nativeEncodeInterleaved(
