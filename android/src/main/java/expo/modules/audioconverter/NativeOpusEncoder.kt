@@ -108,6 +108,9 @@ internal class NativeOpusEncoder private constructor(
 
     @JvmStatic
     private external fun nativeGetVersion(): String
+
+    @JvmStatic
+    private external fun nativeCreate(sampleRate: Int, channels: Int, application: Int): Long
   }
 
   /**
@@ -203,7 +206,6 @@ internal class NativeOpusEncoder private constructor(
   }
 
   // Instance native methods
-  private external fun nativeCreate(sampleRate: Int, channels: Int, application: Int): Long
   private external fun nativeDestroy(handle: Long)
   private external fun nativeSetBitrate(handle: Long, bitrate: Int): Int
   private external fun nativeSetComplexity(handle: Long, complexity: Int): Int
