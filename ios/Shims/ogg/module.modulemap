@@ -1,5 +1,0 @@
-module ogg [system] {
-  header "ogg-umbrella.h"
-  export *
-  link "ogg"
-}

@@ -31,6 +31,11 @@ if(EXISTS "${LIBS_DIR}/libopus.a")
         opus
         log
     )
+
+    # 16KB page size support for Google Play compatibility
+    target_link_options(opus_encoder PRIVATE
+        "-Wl,-z,max-page-size=16384"
+    )
 else()
     message(WARNING "libopus.a not found for ${ANDROID_ABI}")
     message(WARNING "Run scripts/build-opus-android.sh to build native libraries")
@@ -67,6 +72,11 @@ if(EXISTS "${LIBS_DIR}/libmp3lame.a")
     target_link_libraries(lame_encoder
         mp3lame
         log
+    )
+
+    # 16KB page size support for Google Play compatibility
+    target_link_options(lame_encoder PRIVATE
+        "-Wl,-z,max-page-size=16384"
     )
 else()
     message(WARNING "libmp3lame.a not found for ${ANDROID_ABI}")
