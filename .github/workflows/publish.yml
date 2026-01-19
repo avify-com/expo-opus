@@ -43,6 +43,7 @@ jobs:
             test -f android/src/main/jniLibs/$abi/libopus.a || (echo "libopus.a not found for $abi" && exit 1)
             test -f android/src/main/jniLibs/$abi/libmp3lame.a || (echo "libmp3lame.a not found for $abi" && exit 1)
           done
+          test -f android/src/main/cpp/include/opus/opus.h || (echo "opus.h header not found" && exit 1)
           test -f android/src/main/cpp/include/lame/lame.h || (echo "lame.h header not found" && exit 1)
           echo "All Android native files built successfully"
 
@@ -52,7 +53,7 @@ jobs:
           name: android-native
           path: |
             android/src/main/jniLibs/
-            android/src/main/cpp/include/lame/
+            android/src/main/cpp/include/
 
   # Build iOS native libraries
   build-ios-native:
@@ -75,12 +76,19 @@ jobs:
         run: |
           test -d ios/Frameworks/libopus.xcframework || (echo "libopus.xcframework not found" && exit 1)
           test -d ios/Frameworks/libogg.xcframework || (echo "libogg.xcframework not found" && exit 1)
+          test -d ios/Shims/opus || (echo "iOS opus shims not found" && exit 1)
+          test -d ios/Shims/ogg || (echo "iOS ogg shims not found" && exit 1)
+          test -f ios/Shims/opus/module.modulemap || (echo "opus module.modulemap not found" && exit 1)
+          test -f ios/Shims/ogg/module.modulemap || (echo "ogg module.modulemap not found" && exit 1)
+          echo "All iOS frameworks and shims built successfully"
 
       - name: Upload iOS frameworks
         uses: actions/upload-artifact@v4
         with:
           name: ios-frameworks
-          path: ios/Frameworks/
+          path: |
+            ios/Frameworks/
+            ios/Shims/
 
   # Run tests before publishing
   test:
@@ -100,7 +108,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ios-frameworks
-          path: ios/Frameworks/
+          path: ios/
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -136,19 +144,23 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ios-frameworks
-          path: ios/Frameworks/
+          path: ios/
 
       - name: Verify all native libraries present
         run: |
           echo "Verifying iOS frameworks..."
           test -d ios/Frameworks/libopus.xcframework || (echo "libopus.xcframework not found" && exit 1)
           test -d ios/Frameworks/libogg.xcframework || (echo "libogg.xcframework not found" && exit 1)
+          echo "Verifying iOS shims..."
+          test -d ios/Shims/opus || (echo "iOS opus shims not found" && exit 1)
+          test -d ios/Shims/ogg || (echo "iOS ogg shims not found" && exit 1)
           echo "Verifying Android jniLibs..."
           for abi in arm64-v8a armeabi-v7a x86 x86_64; do
             test -f android/src/main/jniLibs/$abi/libopus.a || (echo "libopus.a not found for $abi" && exit 1)
             test -f android/src/main/jniLibs/$abi/libmp3lame.a || (echo "libmp3lame.a not found for $abi" && exit 1)
           done
           echo "Verifying Android headers..."
+          test -f android/src/main/cpp/include/opus/opus.h || (echo "opus.h header not found" && exit 1)
           test -f android/src/main/cpp/include/lame/lame.h || (echo "lame.h header not found" && exit 1)
           echo "All native libraries verified!"
 

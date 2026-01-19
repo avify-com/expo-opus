@@ -190,6 +190,87 @@ create_xcframework() {
     log_info "Created $xcframework_path"
 }
 
+# Copy headers for Swift interop
+copy_swift_shims() {
+    local shims_dir="$MODULE_DIR/ios/Shims"
+
+    # Use headers from build output (more reliable after distclean)
+    local ogg_headers="$BUILD_DIR/libogg-iphoneos-arm64/include/ogg"
+    local opus_headers="$BUILD_DIR/libopus-iphoneos-arm64/include"
+
+    log_info "Creating Swift shims for libogg..."
+    local ogg_shim_dir="$shims_dir/ogg"
+    mkdir -p "$ogg_shim_dir/ogg"
+
+    # Copy ogg headers from build output
+    cp "$ogg_headers/ogg.h" "$ogg_shim_dir/ogg/"
+    cp "$ogg_headers/os_types.h" "$ogg_shim_dir/ogg/"
+    cp "$ogg_headers/config_types.h" "$ogg_shim_dir/ogg/"
+
+    # Create ogg umbrella header
+    cat > "$ogg_shim_dir/ogg-umbrella.h" << 'EOF'
+#import <Foundation/Foundation.h>
+
+#import "ogg/ogg.h"
+#import "ogg/os_types.h"
+#import "ogg/config_types.h"
+EOF
+
+    # Create ogg module map
+    cat > "$ogg_shim_dir/module.modulemap" << 'EOF'
+module ogg {
+    umbrella header "ogg-umbrella.h"
+    export *
+}
+EOF
+
+    log_info "Creating Swift shims for libopus..."
+    local opus_shim_dir="$shims_dir/opus"
+    mkdir -p "$opus_shim_dir/opus"
+
+    # Copy opus headers from build output
+    cp "$opus_headers/opus.h" "$opus_shim_dir/opus/"
+    cp "$opus_headers/opus_defines.h" "$opus_shim_dir/opus/"
+    cp "$opus_headers/opus_types.h" "$opus_shim_dir/opus/"
+    cp "$opus_headers/opus_multistream.h" "$opus_shim_dir/opus/"
+    cp "$opus_headers/opus_projection.h" "$opus_shim_dir/opus/"
+
+    # Create opus umbrella header
+    cat > "$opus_shim_dir/opus-umbrella.h" << 'EOF'
+#import <Foundation/Foundation.h>
+
+#import "opus/opus.h"
+#import "opus/opus_defines.h"
+#import "opus/opus_types.h"
+#import "opus/opus_multistream.h"
+#import "opus/opus_projection.h"
+#import "opus_swift_helpers.h"
+EOF
+
+    # Create opus Swift helpers
+    cat > "$opus_shim_dir/opus_swift_helpers.h" << 'EOF'
+#ifndef OPUS_SWIFT_HELPERS_H
+#define OPUS_SWIFT_HELPERS_H
+
+#import "opus/opus.h"
+
+// Helper functions for Swift interop if needed
+// Currently empty but reserved for future use
+
+#endif /* OPUS_SWIFT_HELPERS_H */
+EOF
+
+    # Create opus module map
+    cat > "$opus_shim_dir/module.modulemap" << 'EOF'
+module opus {
+    umbrella header "opus-umbrella.h"
+    export *
+}
+EOF
+
+    log_info "Swift shims created in $shims_dir"
+}
+
 # Main build process
 main() {
     log_info "=== Building libopus and libogg from official Xiph.org sources ==="
@@ -227,6 +308,11 @@ main() {
     build_for_arch "libopus" "$opus_src" "x86_64" "iphonesimulator"
 
     create_xcframework "libopus" "libopus.a" "$BUILD_DIR/libopus-iphoneos-arm64/include"
+
+    # Copy Swift shims for interop
+    log_info ""
+    log_info "=== Creating Swift shims ==="
+    copy_swift_shims
 
     log_info ""
     log_info "=== Build complete! ==="
