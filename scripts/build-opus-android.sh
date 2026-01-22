@@ -175,6 +175,19 @@ build_for_abi() {
     log_info "Built libopus for $abi"
 }
 
+# Copy headers for JNI compilation
+copy_headers() {
+    local src_dir="$BUILD_DIR/opus-${OPUS_VERSION}"
+    local include_dir="$MODULE_DIR/android/src/main/cpp/include/opus"
+
+    log_info "Copying Opus headers..."
+    mkdir -p "$include_dir"
+    cp "$src_dir/include/opus.h" "$include_dir/" || \
+        cp "$BUILD_DIR/opus-arm64-v8a/include/opus/opus.h" "$include_dir/"
+
+    log_info "Headers copied to $include_dir"
+}
+
 # Main build process
 main() {
     log_info "=== Building libopus for Android from official Xiph.org sources ==="
@@ -193,6 +206,9 @@ main() {
 
     # Download source
     download_source
+
+    # Copy headers immediately after extraction (before distclean removes them)
+    copy_headers
 
     # Build for each ABI
     for abi in $ABIS; do

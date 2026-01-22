@@ -1,6 +1,13 @@
 # Changelog
 
-## [0.0.7] - 2026-01-15
+## [0.0.8] - 2026-01-18
+
+### Fixed
+- Fixed missing opus headers in published package
+- Added header copying to build-opus-android.sh script
+- Ensures opus.h is included in npm package for JNI compilation
+
+## [0.0.7] - 2026-01-15 (BROKEN - missing headers)
 
 ### Fixed
 - Android native libraries now support 16 KB memory page sizes (Google Play requirement)
