@@ -196,7 +196,7 @@ copy_swift_shims() {
 
     # Use headers from build output (more reliable after distclean)
     local ogg_headers="$BUILD_DIR/libogg-iphoneos-arm64/include/ogg"
-    local opus_headers="$BUILD_DIR/libopus-iphoneos-arm64/include"
+    local opus_headers="$BUILD_DIR/libopus-iphoneos-arm64/include/opus"
 
     log_info "Creating Swift shims for libogg..."
     local ogg_shim_dir="$shims_dir/ogg"
