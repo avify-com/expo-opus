@@ -247,15 +247,57 @@ EOF
 #import "opus_swift_helpers.h"
 EOF
 
-    # Create opus Swift helpers
+    # Create opus Swift helpers with wrapper functions for Swift interop
     cat > "$opus_shim_dir/opus_swift_helpers.h" << 'EOF'
 #ifndef OPUS_SWIFT_HELPERS_H
 #define OPUS_SWIFT_HELPERS_H
 
 #import "opus/opus.h"
+#import "opus/opus_defines.h"
 
-// Helper functions for Swift interop if needed
-// Currently empty but reserved for future use
+// Swift-compatible wrapper functions for opus encoder CTL operations
+// These wrap the C macros which Swift cannot call directly
+
+static inline int opus_encoder_set_bitrate(OpusEncoder *st, opus_int32 bitrate) {
+    return opus_encoder_ctl(st, OPUS_SET_BITRATE(bitrate));
+}
+
+static inline int opus_encoder_set_complexity(OpusEncoder *st, opus_int32 complexity) {
+    return opus_encoder_ctl(st, OPUS_SET_COMPLEXITY(complexity));
+}
+
+static inline int opus_encoder_set_vbr(OpusEncoder *st, opus_int32 vbr) {
+    return opus_encoder_ctl(st, OPUS_SET_VBR(vbr));
+}
+
+static inline int opus_encoder_set_vbr_constraint(OpusEncoder *st, opus_int32 cvbr) {
+    return opus_encoder_ctl(st, OPUS_SET_VBR_CONSTRAINT(cvbr));
+}
+
+static inline int opus_encoder_set_signal(OpusEncoder *st, opus_int32 signal) {
+    return opus_encoder_ctl(st, OPUS_SET_SIGNAL(signal));
+}
+
+static inline int opus_encoder_set_application(OpusEncoder *st, opus_int32 application) {
+    return opus_encoder_ctl(st, OPUS_SET_APPLICATION(application));
+}
+
+static inline int opus_encoder_get_bitrate(OpusEncoder *st, opus_int32 *bitrate) {
+    return opus_encoder_ctl(st, OPUS_GET_BITRATE(bitrate));
+}
+
+static inline int opus_encoder_get_complexity(OpusEncoder *st, opus_int32 *complexity) {
+    return opus_encoder_ctl(st, OPUS_GET_COMPLEXITY(complexity));
+}
+
+// Decoder helper functions
+static inline int opus_decoder_set_gain(OpusDecoder *st, opus_int32 gain) {
+    return opus_decoder_ctl(st, OPUS_SET_GAIN(gain));
+}
+
+static inline int opus_decoder_get_gain(OpusDecoder *st, opus_int32 *gain) {
+    return opus_decoder_ctl(st, OPUS_GET_GAIN(gain));
+}
 
 #endif /* OPUS_SWIFT_HELPERS_H */
 EOF
