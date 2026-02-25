@@ -184,7 +184,14 @@ copy_headers() {
     mkdir -p "$include_dir"
     cp "$src_dir/include/opus.h" "$include_dir/" || \
         cp "$BUILD_DIR/opus-arm64-v8a/include/opus/opus.h" "$include_dir/"
-
+    cp "$src_dir/include/opus_types.h" "$include_dir/" || \
+        cp "$BUILD_DIR/opus-arm64-v8a/include/opus/opus_types.h" "$include_dir/"
+    cp "$src_dir/include/opus_defines.h" "$include_dir/" || \
+        cp "$BUILD_DIR/opus-arm64-v8a/include/opus/opus_defines.h" "$include_dir/"
+    cp "$src_dir/include/opus_multistream.h" "$include_dir/" || \
+        cp "$BUILD_DIR/opus-arm64-v8a/include/opus/opus_multistream.h" "$include_dir/"
+    cp "$src_dir/include/opus_projection.h" "$include_dir/" || \
+        cp "$BUILD_DIR/opus-arm64-v8a/include/opus/opus_projection.h" "$include_dir/"
     log_info "Headers copied to $include_dir"
 }
 
