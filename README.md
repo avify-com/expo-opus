@@ -36,43 +36,43 @@ No additional setup required. The package uses Android's MediaCodec for Opus dec
 ### Basic Conversion
 
 ```typescript
-import { convertOpusToMp3, isConversionSupported } from '@avify-com/expo-opus';
+import { convertOpusToMp3, isConversionSupported } from "@avify-com/expo-opus";
 
 // Check if conversion is supported on this device
 if (isConversionSupported()) {
   // Convert from base64
   const result = await convertOpusToMp3(
-    { type: 'base64', data: 'T2dnUwACAAAAAAA...' },
-    { quality: 'medium' }
+    { type: "base64", data: "T2dnUwACAAAAAAA..." },
+    { quality: "medium" },
   );
 
-  console.log('Converted MP3:', result.base64);
-  console.log('Duration:', result.durationMs, 'ms');
-  console.log('Size:', result.sizeBytes, 'bytes');
+  console.log("Converted MP3:", result.base64);
+  console.log("Duration:", result.durationMs, "ms");
+  console.log("Size:", result.sizeBytes, "bytes");
 }
 ```
 
 ### Convert from File
 
 ```typescript
-import { convertOpusToMp3 } from '@avify-com/expo-opus';
+import { convertOpusToMp3 } from "@avify-com/expo-opus";
 
 const result = await convertOpusToMp3(
-  { type: 'uri', uri: 'file:///path/to/audio.ogg' },
-  { bitrate: 192 }
+  { type: "uri", uri: "file:///path/to/audio.ogg" },
+  { bitrate: 192 },
 );
 ```
 
 ### Quality Presets
 
 ```typescript
-import { convertOpusToMp3 } from '@avify-com/expo-opus';
+import { convertOpusToMp3 } from "@avify-com/expo-opus";
 
 // Using quality presets
-await convertOpusToMp3(input, { quality: 'low' });    // 64 kbps
-await convertOpusToMp3(input, { quality: 'medium' }); // 128 kbps (default)
-await convertOpusToMp3(input, { quality: 'high' });   // 192 kbps
-await convertOpusToMp3(input, { quality: 'best' });   // 320 kbps
+await convertOpusToMp3(input, { quality: "low" }); // 64 kbps
+await convertOpusToMp3(input, { quality: "medium" }); // 128 kbps (default)
+await convertOpusToMp3(input, { quality: "high" }); // 192 kbps
+await convertOpusToMp3(input, { quality: "best" }); // 320 kbps
 
 // Or specify exact bitrate
 await convertOpusToMp3(input, { bitrate: 256 });
@@ -81,14 +81,14 @@ await convertOpusToMp3(input, { bitrate: 256 });
 ### With Custom Sample Rate
 
 ```typescript
-import { convertOpusToMp3 } from '@avify-com/expo-opus';
+import { convertOpusToMp3 } from "@avify-com/expo-opus";
 
 const result = await convertOpusToMp3(
-  { type: 'uri', uri: audioPath },
+  { type: "uri", uri: audioPath },
   {
-    quality: 'high',
-    sampleRate: 44100  // Output sample rate
-  }
+    quality: "high",
+    sampleRate: 44100, // Output sample rate
+  },
 );
 ```
 
@@ -100,35 +100,35 @@ Converts OGG/Opus audio to MP3 format.
 
 #### Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `input` | `AudioInput` | The audio source (see below) |
+| Parameter | Type                     | Description                  |
+| --------- | ------------------------ | ---------------------------- |
+| `input`   | `AudioInput`             | The audio source (see below) |
 | `options` | `AudioConversionOptions` | Optional conversion settings |
 
 #### AudioInput
 
 ```typescript
 type AudioInput =
-  | { type: 'base64'; data: string }  // Base64-encoded OGG/Opus data
-  | { type: 'uri'; uri: string };      // File URI (file:// or absolute path)
+  | { type: "base64"; data: string } // Base64-encoded OGG/Opus data
+  | { type: "uri"; uri: string }; // File URI (file:// or absolute path)
 ```
 
 #### AudioConversionOptions
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `bitrate` | `number` | `128` | Target MP3 bitrate (64-320 kbps) |
-| `quality` | `'low' \| 'medium' \| 'high' \| 'best'` | - | Quality preset (overrides bitrate) |
-| `sampleRate` | `number` | source rate | Output sample rate (e.g., 44100, 48000) |
+| Property     | Type                                    | Default     | Description                             |
+| ------------ | --------------------------------------- | ----------- | --------------------------------------- |
+| `bitrate`    | `number`                                | `128`       | Target MP3 bitrate (64-320 kbps)        |
+| `quality`    | `'low' \| 'medium' \| 'high' \| 'best'` | -           | Quality preset (overrides bitrate)      |
+| `sampleRate` | `number`                                | source rate | Output sample rate (e.g., 44100, 48000) |
 
 #### Returns
 
 ```typescript
 interface AudioConversionResult {
-  base64: string;           // Base64-encoded MP3 data
-  durationMs: number;       // Duration in milliseconds
-  sizeBytes: number;        // Size of MP3 in bytes
-  mimeType: 'audio/mpeg';   // Always 'audio/mpeg'
+  base64: string; // Base64-encoded MP3 data
+  durationMs: number; // Duration in milliseconds
+  sizeBytes: number; // Size of MP3 in bytes
+  mimeType: "audio/mpeg"; // Always 'audio/mpeg'
 }
 ```
 
@@ -149,43 +149,43 @@ The module throws typed errors that you can catch and handle:
 ```typescript
 import {
   convertOpusToMp3,
-  AudioConversionErrorCode
-} from '@avify-com/expo-opus';
+  AudioConversionErrorCode,
+} from "@avify-com/expo-opus";
 
 try {
   const result = await convertOpusToMp3(input, options);
 } catch (error) {
   switch (error.code) {
-    case 'INVALID_INPUT':
-      console.error('Invalid input data');
+    case "INVALID_INPUT":
+      console.error("Invalid input data");
       break;
-    case 'UNSUPPORTED_FORMAT':
-      console.error('Not an OGG/Opus file');
+    case "UNSUPPORTED_FORMAT":
+      console.error("Not an OGG/Opus file");
       break;
-    case 'DECODING_FAILED':
-      console.error('Failed to decode Opus audio');
+    case "DECODING_FAILED":
+      console.error("Failed to decode Opus audio");
       break;
-    case 'ENCODING_FAILED':
-      console.error('Failed to encode MP3');
+    case "ENCODING_FAILED":
+      console.error("Failed to encode MP3");
       break;
-    case 'FILE_NOT_FOUND':
-      console.error('Input file not found');
+    case "FILE_NOT_FOUND":
+      console.error("Input file not found");
       break;
-    case 'OUT_OF_MEMORY':
-      console.error('Out of memory');
+    case "OUT_OF_MEMORY":
+      console.error("Out of memory");
       break;
     default:
-      console.error('Unknown error:', error.message);
+      console.error("Unknown error:", error.message);
   }
 }
 ```
 
 ## Platform Support
 
-| Platform | Minimum Version | Notes |
-|----------|-----------------|-------|
-| iOS | 15.1+ | Uses vendored libopus/libogg xcframeworks + LAME CocoaPod |
-| Android | API 29+ (Android 10) | Uses MediaCodec for Opus + androLern for LAME |
+| Platform | Minimum Version      | Notes                                                     |
+| -------- | -------------------- | --------------------------------------------------------- |
+| iOS      | 15.1+                | Uses vendored libopus/libogg xcframeworks + LAME CocoaPod |
+| Android  | API 29+ (Android 10) | Uses MediaCodec for Opus + androLern for LAME             |
 
 ## Use Cases
 
@@ -197,10 +197,13 @@ try {
 ## Example: Caching Converted Audio
 
 ```typescript
-import * as FileSystem from 'expo-file-system';
-import { convertOpusToMp3 } from '@avify-com/expo-opus';
+import * as FileSystem from "expo-file-system";
+import { convertOpusToMp3 } from "@avify-com/expo-opus";
 
-async function convertAndCache(opusUri: string, cacheKey: string): Promise<string> {
+async function convertAndCache(
+  opusUri: string,
+  cacheKey: string,
+): Promise<string> {
   const cachePath = `${FileSystem.cacheDirectory}${cacheKey}.mp3`;
 
   // Check if already cached
@@ -211,8 +214,8 @@ async function convertAndCache(opusUri: string, cacheKey: string): Promise<strin
 
   // Convert
   const result = await convertOpusToMp3(
-    { type: 'uri', uri: opusUri },
-    { quality: 'medium' }
+    { type: "uri", uri: opusUri },
+    { quality: "medium" },
   );
 
   // Save to cache
@@ -255,6 +258,16 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request on [GitHub](https://github.com/avify-com/expo-opus).
+
+## CI/CD & Releases
+
+This project uses GitHub Actions for continuous integration and automated publishing. For detailed documentation on:
+
+- **CI workflow** - Automated testing and native library builds
+- **Publish workflow** - Publishing to GitHub Packages
+- **Creating releases** - Step-by-step release process
+
+See the [CI/CD Documentation](./docs/CI.md).
 
 ## Credits
 
